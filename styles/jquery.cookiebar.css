@@ -1,0 +1,42 @@
+*{
+  padding:0;
+  margin:0;
+
+}
+.cookie-text{
+  color:#fff;
+  text-align:center;
+  line-height:20px;
+  font-size:12px;
+  font-family: "Helvetica Neue",Arial,Helvetica,Geneva,sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.cookie-bar{
+  background-color:#000000;
+  width:100%;
+  display:none;
+}
+.cookie-message {
+  height:75px;
+  width:1024px;
+  margin:0 auto;
+  padding:8px 0;
+  position:relative;
+  top:0;
+  z-index: 99;
+}
+.cookie-message a {
+  font-weight: 800;
+  text-decoration: underline;
+  color: #fff;
+}
+.cookie-bar-close-button{
+  background-color: #008000;
+  border:none;
+  border-radius:3px;
+  margin:6px auto;
+  padding:3px 5px;
+}
+.cookie-bar-close-button:hover{
+  background-color: #009900;
+}

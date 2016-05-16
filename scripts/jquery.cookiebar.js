@@ -1,54 +1,61 @@
 /*!
  * jQuery Cookiebar Plugin
- * https://github.com/carlwoodhouse/jquery.cookieBar
+ * Forked from: https://github.com/carlwoodhouse/jquery.cookieBar
+ *              Copyright 2012, Carl Woodhouse
  *
- * Copyright 2012, Carl Woodhouse
  * Disclaimer: if you still get fined for not complying with the eu cookielaw, it's not our fault.
  * Licence: MIT
+ *
+ * Changes include:
+ *  Updated to support secure protocol
+ *  Removed inline css
+ *  Added additional customizable options
+ * 
  */
- 
+
 (function( $ ){
-  $.fn.cookieBar = function( options ) {  
-	var settings = $.extend( {
-      'closeButton' : 'none',
-	  'secure' : false,
-	  'path' : '/',
-	  'domain' : ''
-    }, options);
-  
-    return this.each(function() {       
-		var cookiebar = $(this);
-		
-		// just in case they didnt hide it by default.
-		cookiebar.hide();
+    $.fn.cookieBar = function( options ) {
+        var settings = $.extend({
+            'cookieName': 'cb-enabled',
+            'cookieValue': 'cb-accepted',
+            'domain': '',
+            'path': '/',
+            'expires': 30,
+            'secure': false,
+            'prependElement': 'body'
+        }, options);
 
-		// if close button not defined. define it!
-		if(settings.closeButton == 'none')
-		{
-			cookiebar.append('<a class="cookiebar-close">Continue</a>');
-			settings = $.extend( {
-				'closeButton' : '.cookiebar-close'
-			}, options);
-		}
+        return this.each(function () {
+            var cookiebar = $(this);
 
-		if ($.cookie('cookiebar') != 'hide') {
-		  cookiebar.show();
-		}
+            if ($.cookie(settings.cookieName) != settings.cookieValue) {
+                cookiebar.show();
+            }
 
-		cookiebar.find(settings.closeButton).click(function() {
-			cookiebar.hide();
-			$.cookie('cookiebar', 'hide', { path: settings.path, secure: settings.secure, domain: settings.domain, expires: 30 });
-			return false;
-		});
-    });
-  };
-  
-  // self injection init
-  $.cookieBar = function( options ) {  
-	$('body').prepend('<div class="ui-widget"><div style="display: none;" class="cookie-message ui-widget-header blue"><p>By using this website you allow us to place cookies on your computer. They are harmless and never personally identify you.</p></div></div>');     
-	$('.cookie-message').cookieBar(options);
-  };
-})( jQuery );
+            $('.cookie-bar-close-button').on('click', function () {
+                cookiebar.slideUp('fast');
+                $.cookie(settings.cookieName, settings.cookieValue,
+                    {path: settings.path, secure: settings.secure, domain: settings.domain, expires: settings.expires});
+                return false;
+            });
+        });
+    };
+
+    // self injection init
+    $.cookieBar = function(options) {
+        $(options.prependElement).prepend(
+            '<div class="cookie-bar">' +
+            '<div class="cookie-message cookie-text">' +
+            '<p>' + options.message + '</p>' +
+            '<button class="cookie-bar-close-button cookie-text">' +options.closeText+ '</button>' +
+            '</div></div>');
+
+        $('.cookie-bar').cookieBar(options);
+
+    };
+
+})(jQuery);
+
 
 /*!
  * Dependancy:
